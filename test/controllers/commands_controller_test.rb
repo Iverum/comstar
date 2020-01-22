@@ -8,7 +8,7 @@ class CommandsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return error message for no dice" do
     expected = { "response_type": "ephemeral", "text": "I didn't recognize that command. Try including some dice to roll." }
-    post "/", params: { command: "/roll" }
+    post "/", params: { command: "/roll", "text": "" }
     assert_response :success
     assert_equal expected, response.parsed_body.symbolize_keys
   end

@@ -11,7 +11,7 @@ class CommandsController < ApplicationController
   private
 
   def roll
-    return ephemeral "I didn't recognize that command. Try including some dice to roll." unless params[:text]
+    return ephemeral "I didn't recognize that command. Try including some dice to roll." unless params[:text].present?
 
     # Split up the text
     possible_dice = params[:text].split
