@@ -4,7 +4,7 @@ class CommandsController < ApplicationController
   VALID_CMDS = ["roll"].freeze
 
   def do
-    send(params[:command].to_sym)
+    send(command.to_sym)
   end
 
   private
@@ -14,8 +14,12 @@ class CommandsController < ApplicationController
   end
 
   def validate_command
-    unless VALID_CMDS.include? params[:command]
+    unless VALID_CMDS.include? command
       render json: { "response_type": "ephemeral", "text": "Sorry, that didn't work. Please try again." }
     end
+  end
+
+  def command
+    params[:command]&.gsub("/", "")
   end
 end

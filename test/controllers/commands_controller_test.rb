@@ -8,7 +8,7 @@ class CommandsControllerTest < ActionDispatch::IntegrationTest
 
   test "should handle roll" do
     expected = { "response_type": "ephemeral", "text": "Hey! You got it!" }
-    post "/", params: { command: "roll" }
+    post "/", params: { command: "/roll" }
     assert_response :success
     assert_equal expected, response.parsed_body.symbolize_keys
   end
