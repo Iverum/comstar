@@ -21,9 +21,10 @@ class CommandsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should handle roll" do
-    expected = { "response_type": "ephemeral", "text": "Hey! You got it!" }
+    expected = { "response_type": "in_channel", "text": "Hey! You got it!" }
     post "/", params: { command: "/roll", text: "2d6 3d10" }
     assert_response :success
-    assert_equal expected, response.parsed_body.symbolize_keys
+    assert_equal 4, response.parsed_body["text"].count("+")
+    assert_equal 1, response.parsed_body["text"].count("=")
   end
 end

@@ -10,10 +10,6 @@ class CommandsController < ApplicationController
 
   private
 
-  def ephemeral(message)
-    return render json: { "response_type": "ephemeral", "text": message }
-  end
-
   def roll
     return ephemeral "I didn't recognize that command. Try including some dice to roll." unless params[:text]
 
@@ -23,8 +19,9 @@ class CommandsController < ApplicationController
     return ephemeral "All arguments need to be in [number]d[size] format." unless possible_dice.all?{ |arg| DICE_REGEX.match?(arg) }
 
     # Everything looks okay, so we should create the dice and roll them
-
-    return ephemeral "Hey! You got it!"
+    rolls = Dice.create_dice(possible_dice).map(&:roll)
+    total = rolls.inject(0, :+)
+    return in_channel "#{rolls.join("+")}=#{total}"
   end
 
   def validate_command
