@@ -132,6 +132,7 @@ GEM
       parallel
     parser (2.7.0.2)
       ast (~> 2.4.0)
+    pg (1.1.4)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -194,7 +195,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
     thor (1.0.1)
     thread_safe (0.3.6)
     tzinfo (1.2.6)
@@ -227,13 +227,13 @@ DEPENDENCIES
   minitest
   newrelic_rpm
   parallel_tests
+  pg (>= 0.18, < 2.0)
   pry-rails
   puma (~> 4.1)
   rails (~> 6.0.2, >= 6.0.2.1)
   rubocop
   spring
   spring-watcher-listen (~> 2.0.0)
-  sqlite3 (~> 1.4)
   tzinfo-data
   web-console
 
