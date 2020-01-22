@@ -27,4 +27,12 @@ class CommandsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 4, response.parsed_body["text"].count("+")
     assert_equal 1, response.parsed_body["text"].count("=")
   end
+
+  test "should save a user" do
+    post "/", params: { command: "/iam", text: "Hey! Listen!", user_id: "test" }
+    assert_response :success
+    user = User.first
+    assert_equal "test", user.slack_id
+    assert_equal "Hey! Listen!", user.body
+  end
 end
