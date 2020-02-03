@@ -50,3 +50,4 @@ end
 
 gem 'honeybadger', '~> 3.1'
 gem 'instrumental_agent', '~> 2.0'
+gem "httparty"
