@@ -6,11 +6,11 @@ class ApplicationController < ActionController::API
   end
 
   def ephemeral(message)
-    return render json: { "response_type": "ephemeral", "text": message, "delete_original": "true" }
+    return render json: { "response_type": "ephemeral", "text": message }
   end
 
   def in_channel(message)
-    return render json: { "response_type": "in_channel", "text": message, "delete_original": "true" }
+    return render json: { "response_type": "in_channel", "text": message }
   end
 
   def delay_in_channel(message)

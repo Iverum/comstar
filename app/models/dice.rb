@@ -1,4 +1,6 @@
 class Dice
+  attr_reader :size
+
   def self.create_dice(dice)
     dice.flat_map do |d|
       count, size = d.split("d")

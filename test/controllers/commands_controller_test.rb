@@ -20,12 +20,24 @@ class CommandsControllerTest < ActionDispatch::IntegrationTest
     assert_equal expected, response.parsed_body.symbolize_keys
   end
 
+  test "should return error for too many dice" do
+    expected = { "response_type": "ephemeral", "text": "You can only roll up to 20 dice at a time." }
+    post "/", params: { command: "/roll", text: "21d6" }
+    assert_response :success
+    assert_equal expected, response.parsed_body.symbolize_keys
+  end
+
+  test "should return error for too big dice" do
+    expected = { "response_type": "ephemeral", "text": "You can only roll up to a d100." }
+    post "/", params: { command: "/roll", text: "2d101" }
+    assert_response :success
+    assert_equal expected, response.parsed_body.symbolize_keys
+  end
+
   test "should handle roll" do
     expected = { "response_type": "in_channel", "text": "Hey! You got it!" }
-    post "/", params: { command: "/roll", text: "2d6 3d10" }
+    post "/", params: { command: "/roll", text: "2d6 3d10", response_url: "http://example.com" }
     assert_response :success
-    assert_equal 4, response.parsed_body["text"].count("+")
-    assert_equal 1, response.parsed_body["text"].count("=")
   end
 
   test "should save a user" do
