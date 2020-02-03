@@ -36,7 +36,10 @@ class CommandsController < ApplicationController
     total = rolls.inject(0, :+)
     # return in_channel "#{rolls.join("+")}=#{total}"
     p "Got here"
-    HTTParty.post(params[:response_url], { "response_type": "in_channel", "text": "That worked!" })
+    p params[:response_url]
+    HTTParty.post(params[:response_url], 
+                  body: { "response_type": "in_channel", "text": "That worked!" }.to_json,
+                  headers: { 'Content-Type' => 'application/json' } )
   end
 
   def validate_command
