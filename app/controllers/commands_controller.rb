@@ -34,7 +34,7 @@ class CommandsController < ApplicationController
     # Everything looks okay, so we should create the dice and roll them
     rolls = Dice.create_dice(possible_dice).map(&:roll)
     total = rolls.inject(0, :+)
-    delay_in_channel("<#{params[:user_id]}> rolled #{params[:text]}:\n #{rolls.join("+")}=#{total}")
+    delay_in_channel("<@#{params[:user_id]}> rolled #{params[:text]}:\n #{rolls.join("+")}=#{total}")
   end
 
   def validate_command
