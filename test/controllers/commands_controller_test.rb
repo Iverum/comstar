@@ -39,12 +39,4 @@ class CommandsControllerTest < ActionDispatch::IntegrationTest
     post "/", params: { command: "/roll", text: "2d6 3d10", response_url: "http://example.com" }
     assert_response :success
   end
-
-  test "should save a user" do
-    post "/", params: { command: "/iam", text: "Hey! Listen!", user_id: "test" }
-    assert_response :success
-    user = User.first
-    assert_equal "test", user.slack_id
-    assert_equal "Hey! Listen!", user.body
-  end
 end

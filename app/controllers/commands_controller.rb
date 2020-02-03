@@ -3,24 +3,13 @@ class CommandsController < ApplicationController
 
   DICE_REGEX = /^\d+d\d+$/i
   USER_REGEX = /^<@UC\w+\|[\w\.]+>$/
-  VALID_CMDS = ["roll", "iam", "whois"].freeze
+  VALID_CMDS = ["roll"].freeze
 
   def do
     send(command.to_sym)
   end
 
   private
-
-  def iam
-    user = User.find_or_initialize_by({ slack_id: params[:user_id] })
-    user.body = params[:text]
-    user.save
-    return ephemeral "Thanks for telling us about you!"
-  end
-
-  def whois
-    return ephemeral "Sorry, not implemenented yet."
-  end
 
   def roll
     return ephemeral "I didn't recognize that command. Try including some dice to roll." unless params[:text].present?
