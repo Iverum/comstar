@@ -2,7 +2,8 @@ class CommandsController < ApplicationController
   before_action :validate_command
 
   DICE_REGEX = /^\d+d\d+$/i
-  VALID_CMDS = ["roll", "iam"].freeze
+  USER_REGEX = /^<@UC\w+\|[\w\.]+>$/
+  VALID_CMDS = ["roll", "iam", "whois"].freeze
 
   def do
     send(command.to_sym)
@@ -15,6 +16,10 @@ class CommandsController < ApplicationController
     user.body = params[:text]
     user.save
     return ephemeral "Thanks for telling us about you!"
+  end
+
+  def whois
+    return ephemeral "Sorry, not implemenented yet."
   end
 
   def roll
