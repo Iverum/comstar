@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::API
   private
 
+  def acknowledge
+    head :ok
+  end
+
   def ephemeral(message)
     return render json: { "response_type": "ephemeral", "text": message, "delete_original": "true" }
   end
