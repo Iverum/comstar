@@ -31,7 +31,7 @@ class CommandsController < ApplicationController
     return ephemeral "All arguments need to be in [number]d[size] format." unless possible_dice.all?{ |arg| DICE_REGEX.match?(arg) }
 
     # Everything looks okay, so we should create the dice and roll them
-    ephemeral ""
+    head :ok
     rolls = Dice.create_dice(possible_dice).map(&:roll)
     total = rolls.inject(0, :+)
     # return in_channel "#{rolls.join("+")}=#{total}"
