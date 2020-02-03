@@ -35,6 +35,7 @@ class CommandsController < ApplicationController
     rolls = Dice.create_dice(possible_dice).map(&:roll)
     total = rolls.inject(0, :+)
     # return in_channel "#{rolls.join("+")}=#{total}"
+    p "Got here"
     HTTParty.post(params[:response_url], { "response_type": "in_channel", "text": "That worked!" })
   end
 
