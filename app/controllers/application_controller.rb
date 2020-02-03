@@ -8,4 +8,10 @@ class ApplicationController < ActionController::API
   def in_channel(message)
     render json: { "response_type": "in_channel", "text": message }
   end
+
+  def delay_in_channel(message)
+    HTTParty.post(params[:response_url],
+                  body: { response_type: "in_channel", text: message}.to_json,
+                  headers: { "Content-Type": "application/json" })
+  end
 end

@@ -30,16 +30,11 @@ class CommandsController < ApplicationController
     # Check that each param meets the structure we expect
     return ephemeral "All arguments need to be in [number]d[size] format." unless possible_dice.all?{ |arg| DICE_REGEX.match?(arg) }
 
-    # Everything looks okay, so we should create the dice and roll them
     head :ok
+    # Everything looks okay, so we should create the dice and roll them
     rolls = Dice.create_dice(possible_dice).map(&:roll)
     total = rolls.inject(0, :+)
-    # return in_channel "#{rolls.join("+")}=#{total}"
-    p "Got here"
-    p params[:response_url]
-    HTTParty.post(params[:response_url], 
-                  body: { "response_type": "in_channel", "text": "That worked!" }.to_json,
-                  headers: { 'Content-Type' => 'application/json' } )
+    delay_in_channel("#{rolls.join("+")}=#{total}")
   end
 
   def validate_command
