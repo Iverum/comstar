@@ -8,6 +8,10 @@ class Command
       @registered_commands << command
     end
 
+    def unregister(command)
+      @registered_commands.delete(command)
+    end
+
     def valid?(command)
       @registered_commands.include? command
     end
@@ -31,6 +35,10 @@ class Command
 
   def error(message)
     [:error, message]
+  end
+
+  def private(message)
+    [:private, message]
   end
 
   def ack(delay)
