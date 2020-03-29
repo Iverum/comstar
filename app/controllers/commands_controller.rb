@@ -7,7 +7,7 @@ class CommandsController < ApplicationController
   Command.register(:roll)
 
   def do
-    response = Command.call_command(command, params[:text])
+    response = Command.call_command(command, params[:text], params[:user_id])
     if (response.first == :error)
       ephemeral response.last
     else
