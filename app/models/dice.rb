@@ -13,6 +13,6 @@ class Dice
   end
 
   def roll
-    Random.rand(1...@size)
+    Random.rand(1...@size) rescue @size
   end
 end

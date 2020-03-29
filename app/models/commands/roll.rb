@@ -16,7 +16,7 @@ module Commands
 
       rolls = dice.map(&:roll)
       total = rolls.inject(0, :+)
-      [:ok, "<@#{@args[2]}> rolled #{@args.first}:\n #{rolls.join("+")}=#{total}"]
+      [:ok, "<@#{@args[1]}> rolled #{@args.first}:\n #{rolls.join("+")}=#{total}"]
     end
   end
 end
