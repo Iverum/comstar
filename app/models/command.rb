@@ -6,6 +6,10 @@ class Command
       @registered_commands << command
     end
 
+    def valid?(command)
+      @registered_commands.include? command
+    end
+
     def call_command(name, *args)
       command = "Commands::#{name.to_s.classify}".constantize.new(args)
       command.perform

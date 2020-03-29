@@ -3,23 +3,20 @@ class CommandsController < ApplicationController
 
   DICE_REGEX = /^\d+d\d+$/i
   USER_REGEX = /^<@UC\w+\|[\w\.]+>$/
-  VALID_CMDS = ["decide", "roll"].freeze
+
+  Command.register(:decide)
+  Command.register(:roll)
 
   def do
-    send(command.to_sym)
+    response = Command.call_command(command, params[:text])
+    if (response.first == :error)
+      ephemeral response.last
+    else
+      in_channel response.last
+    end
   end
 
   private
-
-  def decide
-    return ephemeral "I didn't recognize that command. Try including some options to decide upon." unless params[:text].present?
-
-    options = params[:text].split("|").map(&:strip)
-
-    return ephemeral "I didn't recognize any options. I expect options to be pipe(|) separated." if options.empty? || options.length == 1
-
-    return in_channel "#{options.sample}"
-  end
 
   def roll
     return ephemeral "I didn't recognize that command. Try including some dice to roll." unless params[:text].present?
@@ -42,12 +39,12 @@ class CommandsController < ApplicationController
   end
 
   def validate_command
-    unless VALID_CMDS.include? command
-      return ephemeral "Sorry, that didn't work. Please try again."
+    unless Command.valid? command
+      return ephemeral Command.new.perform.last
     end
   end
 
   def command
-    params[:command]&.gsub("/", "")
+    params[:command]&.gsub("/", "").to_sym
   end
 end

@@ -1,11 +1,6 @@
 require 'test_helper'
 
 class CommandsControllerTest < ActionDispatch::IntegrationTest
-  test "should post do" do
-    post "/"
-    assert_response :success
-  end
-
   test "should return error message for no dice" do
     expected = { "response_type": "ephemeral", "text": "I didn't recognize that command. Try including some dice to roll." }
     post "/", params: { command: "/roll", "text": "" }
@@ -35,8 +30,14 @@ class CommandsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should handle roll" do
-    expected = { "response_type": "in_channel", "text": "Hey! You got it!" }
     post "/", params: { command: "/roll", text: "2d6 3d10", response_url: "http://example.com" }
     assert_response :success
+  end
+
+  test "should decide" do
+    expected = { "response_type": "in_channel", "text": "one" }
+    post "/", params: { command: "/decide", text: "one", response_url: "http://example.com" }
+    assert_response :success
+    assert_equal expected, response.parsed_body.symbolize_keys
   end
 end
