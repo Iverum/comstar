@@ -28,6 +28,7 @@ class RollTest < ActiveSupport::TestCase
   test "roll dice" do
     command = Commands::Roll.new({ text: "1d1", sender: "user_id" })
     response = command.perform
-    assert_equal "<@user_id> rolled 1d1:\n 1=1", response.last
+    assert_equal :ack, response.first
+    assert_equal "<@user_id> rolled 1d1:\n 1=1", response.last.call
   end
 end

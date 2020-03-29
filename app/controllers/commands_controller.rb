@@ -8,8 +8,11 @@ class CommandsController < ApplicationController
 
   def do
     response = Command.call_command(command, { text: params[:text], sender: params[:user_id] })
-    if (response.first == :error)
+    if response.first == :error
       ephemeral response.last
+    elsif response.first == :ack
+      acknowledge
+      delay_in_channel response.last.call
     else
       in_channel response.last
     end

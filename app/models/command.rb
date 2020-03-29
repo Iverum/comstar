@@ -21,6 +21,20 @@ class Command
   end
 
   def perform
-    return [:error, "I don't understand that command."]
+    error "I don't understand that command."
+  end
+
+  private
+
+  def error(message)
+    [:error, message]
+  end
+
+  def ack(delay)
+    [:ack, delay]
+  end
+
+  def ok(message)
+    [:ok, message]
   end
 end
