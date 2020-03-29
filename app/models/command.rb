@@ -17,6 +17,6 @@ class Command
   end
 
   def perform
-    return "I don't understand that command."
+    return [:error, "I don't understand that command."]
   end
 end
