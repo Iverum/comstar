@@ -3,7 +3,7 @@ module Commands
     DICE_REGEX = /^\d+d\d+$/i
 
     def perform
-      possible_dice = @args.first
+      possible_dice = @args[:text]
       return [:error, "I didn't recognize that command. Try including some dice to roll."] unless possible_dice.present?
 
       possible_dice = possible_dice.split
@@ -16,7 +16,7 @@ module Commands
 
       rolls = dice.map(&:roll)
       total = rolls.inject(0, :+)
-      [:ok, "<@#{@args[1]}> rolled #{@args.first}:\n #{rolls.join("+")}=#{total}"]
+      [:ok, "<@#{@args[:sender]}> rolled #{@args[:text]}:\n #{rolls.join("+")}=#{total}"]
     end
   end
 end

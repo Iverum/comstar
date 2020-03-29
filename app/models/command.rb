@@ -10,14 +10,14 @@ class Command
       @registered_commands.include? command
     end
 
-    def call_command(name, *args)
+    def call_command(name, args)
       command = "Commands::#{name.to_s.classify}".constantize.new(args)
       command.perform
     end
   end
 
-  def initialize(*args)
-    @args = args.flatten
+  def initialize(args)
+    @args = args
   end
 
   def perform
