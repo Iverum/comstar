@@ -5,4 +5,11 @@ class CommandTest < ActiveSupport::TestCase
     command = Command.new
     assert_equal "I don't understand that command.", command.perform
   end
+
+  test "register a command and call it" do
+    Command.register(:decide)
+    args = ["one", "two", "three"]
+    response = Command.call_command(:decide, args.join("|"))
+    assert args.include? response
+  end
 end
