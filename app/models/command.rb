@@ -2,6 +2,8 @@ class Command
   @registered_commands = []
 
   class << self
+    attr_reader :registered_commands
+
     def register(command)
       @registered_commands << command
     end
@@ -16,12 +18,13 @@ class Command
     end
   end
 
-  def initialize(args)
+  def initialize(args = {})
     @args = args
   end
 
   def perform
-    error "I don't understand that command."
+    available_commands = Commands::Help.new.perform.last
+    error "I don't understand that command.\n#{available_commands}"
   end
 
   private
