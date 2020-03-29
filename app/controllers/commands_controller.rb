@@ -5,12 +5,16 @@ class CommandsController < ApplicationController
 
   Command.register(:decide)
   Command.register(:roll)
+  Command.register(:iam)
 
   def do
     response = Command.call_command(command, { text: params[:text], sender: params[:user_id] })
-    if response.first == :error
+    case response.first
+    when :error
       ephemeral response.last
-    elsif response.first == :ack
+    when :private
+      ephemeral response.last
+    when :ack
       acknowledge
       delay_in_channel response.last.call
     else

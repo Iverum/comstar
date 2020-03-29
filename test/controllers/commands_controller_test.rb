@@ -40,4 +40,11 @@ class CommandsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal expected, response.parsed_body.symbolize_keys
   end
+
+  test "should register a user and respond ephemerally" do
+    expected = { "response_type": "ephemeral", "text": "Your bio has been saved." }
+    post "/", params: { command: "/iam", text: "Hello, world!", response_url: "http://www.example.com" }
+    assert_response :success
+    assert_equal expected, response.parsed_body.symbolize_keys
+  end
 end
