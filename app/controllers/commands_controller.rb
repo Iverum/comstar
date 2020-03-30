@@ -1,53 +1,36 @@
 class CommandsController < ApplicationController
   before_action :validate_command
 
-  DICE_REGEX = /^\d+d\d+$/i
   USER_REGEX = /^<@UC\w+\|[\w\.]+>$/
-  VALID_CMDS = ["decide", "roll"].freeze
+
+  Command.register(:decide)
+  Command.register(:roll)
+  Command.register(:iam)
 
   def do
-    send(command.to_sym)
+    response = Command.call_command(command, { text: params[:text], sender: params[:user_id] })
+    case response.first
+    when :error
+      ephemeral response.last
+    when :private
+      ephemeral response.last
+    when :ack
+      acknowledge
+      delay_in_channel response.last.call
+    else
+      in_channel response.last
+    end
   end
 
   private
 
-  def decide
-    return ephemeral "I didn't recognize that command. Try including some options to decide upon." unless params[:text].present?
-
-    options = params[:text].split("|").map(&:strip)
-
-    return ephemeral "I didn't recognize any options. I expect options to be pipe(|) separated." if options.empty? || options.length == 1
-
-    return in_channel "#{options.sample}"
-  end
-
-  def roll
-    return ephemeral "I didn't recognize that command. Try including some dice to roll." unless params[:text].present?
-
-    # Split up the text
-    possible_dice = params[:text].split
-    # Check that each param meets the structure we expect
-    return ephemeral "All arguments need to be in [number]d[size] format." unless possible_dice.all?{ |arg| DICE_REGEX.match?(arg) }
-
-    dice = Dice.create_dice(possible_dice)
-    return ephemeral "You can only roll up to 20 dice at a time." unless dice.length <= 20
-
-    return ephemeral "You can only roll up to a d100." if dice.any? { |d| d.size > 100 }
-
-    acknowledge
-    # Everything looks okay, so we should roll the dice
-    rolls = dice.map(&:roll)
-    total = rolls.inject(0, :+)
-    delay_in_channel("<@#{params[:user_id]}> rolled #{params[:text]}:\n #{rolls.join("+")}=#{total}")
-  end
-
   def validate_command
-    unless VALID_CMDS.include? command
-      return ephemeral "Sorry, that didn't work. Please try again."
+    unless Command.valid? command
+      return ephemeral Command.new.perform.last
     end
   end
 
   def command
-    params[:command]&.gsub("/", "")
+    params[:command]&.gsub("/", "").to_sym
   end
 end
