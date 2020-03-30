@@ -1,11 +1,10 @@
 class CommandsController < ApplicationController
   before_action :validate_command
 
-  USER_REGEX = /^<@UC\w+\|[\w\.]+>$/
-
   Command.register(:decide)
   Command.register(:roll)
   Command.register(:iam)
+  Command.register(:whois)
 
   def do
     response = Command.call_command(command, { text: params[:text], sender: params[:user_id] })
