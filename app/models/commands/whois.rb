@@ -1,6 +1,6 @@
 module Commands
   class Whois < Command
-    USER_REGEX = /^<@(U\w+)>$/
+    USER_REGEX = /^<@(U\w+)(\|.+)?>$/
 
     def perform
       matches = @args[:text].match(USER_REGEX)
